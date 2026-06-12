@@ -1,0 +1,12 @@
+# Datasets (exceed GitHub's 100MB file limit)
+AI_Data/
+Human_Data/
+
+# Caching & python artifacts
+__pycache__/
+.cache/
+.gemini/
+*.pyc
+
+# Local scratch files
+scratch/
