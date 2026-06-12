@@ -85,6 +85,13 @@ Trains the German BERT model:
 - Fine-tunes the model using PyTorch and HuggingFace `transformers` on the RTX 4080 GPU.
 - Outputs evaluation metrics on the test split.
 
+### [NEW] [train_stylometrics.py](file:///c:/Users/vijayakr/Documents/Data_Analysis_Splitting/src/train_stylometrics.py)
+Trains a vocabulary-independent stylometric classifier:
+- Extracts structural and grammatical features: word counts, average word lengths, Type-Token Ratio (lexical diversity), and punctuation density.
+- Extracts frequencies of 15 standard German function words (stopwords) that subconscious writing style rests on, while ignoring semantic keywords.
+- Trains a `RandomForestClassifier` (or `GradientBoostingClassifier`) using scikit-learn.
+- Reports evaluation metrics and prints feature importances to verify what structural cues it relies on.
+
 ---
 
 ## Verification Plan
@@ -95,7 +102,9 @@ We will verify each step by running:
 2. `python src/create_splits.py --strategy speaker` (or document) to create the splits and verify that no speaker or document overlaps exist between train, val, and test.
 3. `python src/train_tfidf.py` to train the TF-IDF baseline and inspect the top features.
 4. `python src/train_bert.py --epochs 1 --sample 50000` to verify BERT training on a sample using CUDA.
+5. `python src/train_stylometrics.py` to train the Random Forest stylometric model and print its feature importances.
 
 ### Manual Verification
 - We will inspect the generated `dataset_validation_report.md` to confirm counts, sentence lengths, and frequencies match the expected distributions.
 - We will print the top-weighted coefficients of the Logistic Regression model to verify that none of the template-specific keywords are being used as shortcut features.
+- We will inspect the feature importances of the stylometric model to ensure it is relying on grammatical features (like punctuation, lexical richness, and stopword ratios) rather than templates.

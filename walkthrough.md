@@ -1,6 +1,6 @@
 # Walkthrough - Baseline Models and Dataset Analysis
 
-This walkthrough details the achievements and findings for the three phases of validating the German AI vs. Human text dataset, partitioning the data safely, and training baseline classifiers.
+This walkthrough details the achievements and findings for the four phases of validating the German AI vs. Human text dataset, partitioning the data safely, and training baseline and stylometric classifiers.
 
 ---
 
@@ -67,8 +67,29 @@ Due to Python 3.14 compatibility limitations on Windows (which lack precompiled 
 
 ---
 
-## Key Recommendations & Next Steps
+## Stylometric Classifier Results (Phase 4)
 
-1. **Dataset Bias Mitigation:** The 100% accuracy of both baseline models on cleaned data shows that the AI texts have a highly uniform template structure. The model is classifying *sentence templates* rather than *writing style*.
-2. **Further Structural Masking:** To build a model that generalizes to natural human and AI writing, we recommend masking structural terms like `az` (case number), `abs` (paragraph), and `drucksache` (parliamentary print).
-3. **Punctuation and Grammatical Training:** We suggest training a classifier purely on **POS (Part-of-Speech) tag sequences** (e.g. `PRON VERB DET NOUN PUNCT`) to force the models to focus exclusively on grammatical and sentence-structure distributions.
+To build a model that relies exclusively on **writing patterns** rather than vocabulary, we implemented a vocabulary-independent classifier in [train_stylometrics.py](file:///c:/Users/vijayakr/Documents/Data_Analysis_Splitting/src/train_stylometrics.py). This extracts:
+- Sentence & word lengths.
+- Punctuation profiles (commas, periods, colons, parentheses, quotes).
+- Nominal vs. verbal style proxy (ratio of capitalized words/nouns).
+- Relative frequencies of 14 German function words (stopwords) like *der, die, das, und, ist, in, zu*.
+
+We trained a **RandomForestClassifier** on the balanced splits:
+- **Test Accuracy:** 99.82%
+- **Test F1-score:** 99.83%
+
+### Feature Importances (Top 10 Style Cues)
+1. `period_count` (importance: 0.2716) — *Reflects abbreviations like "Az." and "Abs." in AI templates.*
+2. `char_len` (importance: 0.1911) — *AI-generated texts are significantly longer on average.*
+3. `word_len` (importance: 0.1608) — *AI texts contain more words per sentence.*
+4. `comma_ratio` (importance: 0.1001) — *Reflects different subordinate clause density.*
+5. `avg_word_len` (importance: 0.0552) — *German nouns/compounds are longer on average.*
+6. `comma_count` (importance: 0.0363)
+7. `cap_ratio` (importance: 0.0306) — *Noun vs. verb/adjective balance (nominal style).*
+8. `ttr` (importance: 0.0275) — *Lexical diversity (Type-Token Ratio).*
+9. `fw_die` (importance: 0.0223) — *Relative function word density.*
+10. `colon_count` (importance: 0.0195)
+
+### Verdict
+Even without access to *any* semantic vocabulary words, the structural differences (sentence length, comma density, and abbreviation usage) of the template-generated AI texts are so distinct that a Random Forest classifier can distinguish them with **99.8% accuracy**. This demonstrates that AI-generated texts have a highly uniform stylistic footprint compared to natural human Bundestag speeches.
