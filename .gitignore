@@ -10,3 +10,8 @@ __pycache__/
 
 # Local scratch files
 scratch/
+
+# Model weights (exceed GitHub's 100MB file limit)
+best_model/*.safetensors
+best_model/*.bin
+best_model/*.pt

@@ -1,0 +1,21 @@
+{
+  "human_samples": 2074797,
+  "ai_samples": 250001,
+  "ai_models": 8,
+  "domains": 4,
+  "duplicates": 0,
+  "missing_text": 0,
+  "model_distribution": {
+    "Gemini": 87591,
+    "Mistral": 70948,
+    "Llama": 45411,
+    "Gemma": 25017,
+    "Phi3": 21034
+  },
+  "domain_distribution": {
+    "bundestag_speech": 2074797,
+    "policy_document": 83333,
+    "public_administration": 83334,
+    "state_law": 83334
+  }
+}
