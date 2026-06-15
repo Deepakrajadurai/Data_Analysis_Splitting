@@ -145,29 +145,26 @@ def main():
         col_buttons = st.columns(4)
         with col_buttons[0]:
             if st.button("Load Human Example 1"):
-                st.session_state.text_input = HUMAN_EXAMPLES[0]
+                st.session_state.input_area = HUMAN_EXAMPLES[0]
         with col_buttons[1]:
             if st.button("Load Human Example 2"):
-                st.session_state.text_input = HUMAN_EXAMPLES[1]
+                st.session_state.input_area = HUMAN_EXAMPLES[1]
         with col_buttons[2]:
             if st.button("Load AI Example 1"):
-                st.session_state.text_input = AI_EXAMPLES[0]
+                st.session_state.input_area = AI_EXAMPLES[0]
         with col_buttons[3]:
             if st.button("Load AI Example 2"):
-                st.session_state.text_input = AI_EXAMPLES[1]
+                st.session_state.input_area = AI_EXAMPLES[1]
                 
         # Initialize session state for text input if not present
-        if "text_input" not in st.session_state:
-            st.session_state.text_input = ""
+        if "input_area" not in st.session_state:
+            st.session_state.input_area = ""
 
         user_input = st.text_area(
             "Paste German text sentence or paragraph below:",
-            value=st.session_state.text_input,
             height=150,
             key="input_area"
         )
-        # Link text area value to session state
-        st.session_state.text_input = user_input
 
         if st.button("Run Detector", type="primary"):
             if not user_input.strip():
